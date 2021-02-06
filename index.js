@@ -1,8 +1,20 @@
+const { logSuccess, logError } = require('./utils/coloredLogs')
+const express = require('express')
+const app = express()
+app.set('port', 3000)
+
+app.get('/', (req, res) => {
+  res.json({ isBotRunning: true })
+})
+
+app.listen(app.get('port'), () => {
+  logSuccess(`Server is listening on port ${app.get('port')}!`)
+})
+
 const { prefix, token } = require('./config')
 
 const Discord = require('discord.js')
 const fs = require('fs')
-const { logSuccess, logError } = require('./utils/coloredLogs')
 
 const client = new Discord.Client()
 client.commands = new Discord.Collection()

@@ -50,7 +50,7 @@ module.exports = {
         })
       })
 
-      const filter = (reaction, user) => emojis.includes(reaction.emoji.name) && user.id == message.author.id
+      const filter = (reaction, user) => emojis.includes(`<a:${reaction.emoji.name}:${reaction.emoji.id}>`) && user.id == message.author.id
 
       const reactionCollector = newMessage.createReactionCollector(
         filter,
@@ -62,16 +62,15 @@ module.exports = {
 
       reactionCollector.on('collect', async reaction => {
         reaction.users.remove(message.author)
-        const role = section.options.filter(option => option.emoji == reaction.emoji.name)[0].role
+        const role = section.options.filter(option => option.emoji == `<a:${reaction.emoji.name}:${reaction.emoji.id}>`)[0].role
         roles.push(role)
         await newMessage.reactions.removeAll()
         if (index + 1 == registerConfig.length) {
           newMessage.delete()
-          message.channel.send(roles.map(role => `<@&${role}>`).join(' '))
+          message.channel.send(`${member} ***foi registrado com sucesso!***`)
           for (const selectedRole of roles) {
             await member.roles.add(selectedRole)
           }
-          // message.guild.roles.cache.get(roles)
           return
         }
         index++
