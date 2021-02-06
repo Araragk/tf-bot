@@ -1,65 +1,18 @@
 [
   {
-    "text": "Sexo",
+    "text": "Sexo:",
     "options": [
       {
-        "emoji": "♂️",
-        "role": "@Homem"
+        "role": "807616269162905610",
+        "emoji": "♂"
       },
       {
-        "emoji": "♀️",
-        "role": "@Mulher"
+        "role": "807615686611959808",
+        "emoji": "♀️"
       },
       {
-        "emoji": "🚁",
-        "role": "@Não Binário"
-      }
-    ]
-  },
-  {
-    "text": "Idade",
-    "options": [
-      {
-        "emoji": "🍼",
-        "role": "@-18"
-      },
-      {
-        "emoji": "🍺",
-        "role": "@+18"
-      }
-    ]
-  },
-  {
-    "text": "Preferência Sexual",
-    "options": [
-      {
-        "emoji": "📏",
-        "role": "@Hétero"
-      },
-      {
-        "emoji": "🌈",
-        "role": "@LGBT+"
-      }
-    ]
-  },
-  {
-    "text": "Estado Civil",
-    "options": [
-      {
-        "emoji": "😔",
-        "role": "@Solteiro"
-      },
-      {
-        "emoji": "💞",
-        "role": "@Namorando"
-      },
-      {
-        "emoji": "💘",
-        "role": "@Casado"
-      },
-      {
-        "emoji": "💝",
-        "role": "@Enrolado"
+        "role": "807616787092996096",
+        "emoji": "☯️"
       }
     ]
   }

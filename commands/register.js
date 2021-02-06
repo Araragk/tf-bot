@@ -12,18 +12,19 @@ module.exports = {
     message.delete()
     const member = message.mentions.members.first()
 
-    if (!member.user) return message.channel.send(`${message.author}***, Você precisa passar um usuário como parâmetro!***`)
-    if (member.user.id == message.client.user.id) return message.channel.send(`${message.author}***, Você não pode me registrar!***`)
-    if (member.user.id == message.author.id) return message.channel.send(`${message.author}***, Você não pode registrar a si mesmo!***`)
+    if (!member) return message.channel.send(`${message.author}***, Você precisa passar um usuário como parâmetro!***`)
+    if (member.id == message.client.user.id) return message.channel.send(`${message.author}***, Você não pode me registrar!***`)
+    if (member.id == message.author.id) return message.channel.send(`${message.author}***, Você não pode registrar a si mesmo!***`)
 
-    function buildPage(section) {
+    function buildPage(index) {
+      const section = registerConfig[index]
       let descriptionText = ''
-      registerConfig[section].options.forEach(option => {
-        descriptionText += `${option.emoji} ${option.role}\n`
+      section.options.forEach(option => {
+        descriptionText += `${option.emoji} <@&${option.role}>\n`
       })
   
       const embed = new Discord.MessageEmbed()
-        .setTitle(registerConfig[section].text)
+        .setTitle(section.text)
         .setDescription(descriptionText)
         .setColor(0xff8ae2)
 
@@ -31,12 +32,13 @@ module.exports = {
     }
 
     const roles = []
-    let section = 0
+    let index = 0
+    let section = registerConfig[index]
 
-    const embed = buildPage(section)
+    const embed = buildPage(index)
     
     message.channel.send(embed).then(newMessage => {
-      registerConfig[section].options.forEach(async option => {
+      section.options.forEach(async option => {
         await newMessage.react(option.emoji)
       })
 
@@ -48,7 +50,6 @@ module.exports = {
         })
       })
 
-      console.log(emojis)
       const filter = (reaction, user) => emojis.includes(reaction.emoji.name) && user.id == message.author.id
 
       const reactionCollector = newMessage.createReactionCollector(
@@ -61,18 +62,23 @@ module.exports = {
 
       reactionCollector.on('collect', async reaction => {
         reaction.users.remove(message.author)
-        const role = registerConfig[section].options.filter(option => option.emoji == reaction.emoji.name)[0].role
-        console.log(role)
+        const role = section.options.filter(option => option.emoji == reaction.emoji.name)[0].role
         roles.push(role)
         await newMessage.reactions.removeAll()
-        if (section + 1 == registerConfig.length) {
+        if (index + 1 == registerConfig.length) {
           newMessage.delete()
-          return message.channel.send(roles.join(', ')) 
+          message.channel.send(roles.map(role => `<@&${role}>`).join(' '))
+          for (const selectedRole of roles) {
+            await member.roles.add(selectedRole)
+          }
+          // message.guild.roles.cache.get(roles)
+          return
         }
-        section++
-        const embed = buildPage(section)
+        index++
+        section = registerConfig[index]
+        const embed = buildPage(index)
         newMessage.edit(embed)
-        registerConfig[section].options.forEach(async option => {
+        section.options.forEach(async option => {
           await newMessage.react(option.emoji)
         })
       })
